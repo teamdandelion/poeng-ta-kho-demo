@@ -5,7 +5,7 @@
 // dashboard when you connect this repo, or builds will fail.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "vibe-code-cambodia",
+  "name": "poeng-ta-kho-demo",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",

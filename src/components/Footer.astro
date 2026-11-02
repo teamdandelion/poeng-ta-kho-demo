@@ -1,15 +1,35 @@
 ---
 import { site } from '../site';
+
+const sources = [
+  { label: 'Wikipedia: Phnom Kulen National Park', href: 'https://en.wikipedia.org/wiki/Phnom_Kulen_National_Park' },
+  { label: 'Travel Begins at 40: Poeng Ta Kho', href: 'https://www.travelbeginsat40.com/directory/listing/poeng-ta-kho-amazing-cliff/' },
+  { label: 'Geocaching: Poeng Ta Kho', href: 'https://www.geocaching.com/geocache/GCAK3D8' },
+  { label: 'ASEAN Angkor Guide: Kulen cliff viewpoint', href: 'https://www.aseanangkorguide.com/kulen-mountain-cliff-viewpoint/' },
+];
 ---
 
 <footer class="border-t border-ink/10">
-  <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-10 text-sm text-muted sm:flex-row sm:justify-between sm:px-6">
-    <p>
-      © {new Date().getFullYear()} {site.name}. Built with AI, on purpose.
-      <span class="km" lang="km">បង្កើតដោយ AI ដោយចេតនា។</span>
-    </p>
-    <p>
-      Questions? <span lang="km" class="font-khmer">មានសំណួរ?</span> <a href={`mailto:${site.contactEmail}`} class="font-medium text-ink underline underline-offset-4 hover:text-brand">{site.contactEmail}</a>
-    </p>
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-muted sm:px-6 md:grid-cols-2">
+    <div>
+      <p class="font-display text-base font-bold text-ink">{site.name}</p>
+      <p class="mt-2">
+        A demo website, built with AI at New Hope Cambodia. Details like prices and opening times can change, so check with your driver or guesthouse before you go.
+        <span class="km" lang="km">គេហទំព័រគំរូ បង្កើតដោយ AI នៅ New Hope Cambodia។ តម្លៃ និងម៉ោងបើកអាចផ្លាស់ប្តូរ សូមសួរអ្នកបើកបរ ឬផ្ទះសំណាក់មុនចេញដំណើរ។</span>
+      </p>
+      <p class="mt-4">© {new Date().getFullYear()} {site.name}</p>
+    </div>
+    <div>
+      <p class="font-display text-base font-bold text-ink">Sources <span lang="km" class="font-khmer font-normal">· ប្រភព</span></p>
+      <ul class="mt-2 space-y-1">
+        {
+          sources.map((s) => (
+            <li>
+              <a href={s.href} class="underline underline-offset-4 hover:text-brand" rel="noopener">{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </footer>

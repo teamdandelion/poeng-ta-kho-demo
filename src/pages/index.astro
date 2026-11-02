@@ -5,300 +5,377 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getDecks } from '../lib/decks';
+
+const stats = [
+  { value: '~48 km', label: 'from Siem Reap town to Phnom Kulen National Park', labelKm: 'ពីទីក្រុងសៀមរាបទៅឧទ្យានជាតិភ្នំគូលែន' },
+  { value: '~5 min', label: 'walk from the road, through the forest', labelKm: 'ដើរពីផ្លូវកាត់ព្រៃប្រហែល ៥ នាទី' },
+  { value: '$20', label: 'park ticket for foreign visitors', labelKm: 'សំបុត្រចូលឧទ្យានសម្រាប់ភ្ញៀវបរទេស' },
+  { value: 'Free', label: 'for Cambodian visitors', labelKm: 'ឥតគិតថ្លៃសម្រាប់ជនជាតិខ្មែរ' },
+];
+
+const sights = [
+  {
+    icon: '🟠',
+    title: 'Orange rock',
+    text: 'Smooth orange rock formations that stand out against the green jungle around them.',
+  },
+  {
+    icon: '🌄',
+    title: 'Canyon views',
+    text: 'From the edge, look out over the canyon and the mountain ranges beyond.',
+  },
+  {
+    icon: '🥾',
+    title: 'A short forest walk',
+    text: 'Park by the road, then walk about five minutes to the cliff.',
+  },
+];
 
 const steps = [
   {
-    icon: '🧰',
-    title: 'Choose a stack',
-    titleKm: 'ជ្រើសរើស stack',
-    text: 'Pick the technology the AI will use. AI can help you choose. This week, it’s chosen for you.',
-    textKm: 'ជ្រើសរើសបច្ចេកវិទ្យាដែល AI នឹងប្រើ។ AI អាចជួយអ្នកជ្រើសរើសបាន។ សម្រាប់វគ្គនេះ យើងបានជ្រើសរើសរួចហើយ។',
+    icon: '🌅',
+    title: 'Leave early',
+    titleKm: 'ចេញដំណើរពីព្រឹក',
+    text: 'Start from Siem Reap in the morning. The road up Phnom Kulen is reported to be one-way: up in the morning, down in the afternoon. Aim to be going up before 11 AM.',
   },
   {
-    icon: '💬',
-    title: 'Prompt',
-    titleKm: 'ប្រាប់ AI',
-    text: 'Describe the website you want, in plain words. English or Khmer.',
-    textKm: 'ពិពណ៌នាគេហទំព័រដែលអ្នកចង់បាន ជាពាក្យសាមញ្ញ។ ភាសាអង់គ្លេស ឬភាសាខ្មែរក៏បាន។',
+    icon: '🚗',
+    title: 'Drive north',
+    titleKm: 'បើកទៅទិសខាងជើង',
+    text: 'It is about 48 km and takes roughly 1.5 to 2 hours by car or van. The road is rough in places.',
   },
   {
-    icon: '🔁',
-    title: 'Iterate',
-    titleKm: 'កែលម្អម្តងហើយម្តងទៀត',
-    text: 'Check the result and tell the AI what to improve. Repeat! This is the real skill.',
-    textKm: 'ពិនិត្យលទ្ធផល ហើយប្រាប់ AI ពីអ្វីដែលត្រូវកែ។ ធ្វើម្តងទៀត! នេះគឺជាជំនាញពិតប្រាកដ។',
+    icon: '🎟️',
+    title: 'Pay the park ticket',
+    titleKm: 'បង់សំបុត្រចូលឧទ្យាន',
+    text: '$20 in cash for foreign visitors, free for Cambodians. The Angkor Pass does not cover it. Ask your driver where to pay.',
   },
   {
-    icon: '🚀',
-    title: 'Ship it',
-    titleKm: 'ដាក់ឱ្យប្រើ',
-    text: 'Publish it to the internet, free, at a link you can share.',
-    textKm: 'ដាក់វានៅលើអ៊ីនធឺណិត ដោយឥតគិតថ្លៃ ជាមួយតំណភ្ជាប់ដែលអ្នកអាចចែករំលែកបាន។',
+    icon: '🪧',
+    title: 'Find the sign',
+    titleKm: 'រកស្លាកសញ្ញា',
+    text: 'Look for a small sign by the road. Park there, then walk about 5 minutes through the forest to the cliff.',
   },
 ];
 
-const stats = [
-  { value: '0', label: 'lines of code to memorize', labelKm: 'បន្ទាត់កូដដែលត្រូវទន្ទេញ' },
-  { value: '1', label: 'live website each', labelKm: 'គេហទំព័រផ្ទាល់ខ្លួនម្នាក់មួយ' },
-  { value: '$0', label: 'to publish it', labelKm: 'ដើម្បីដាក់វាលើអ៊ីនធឺណិត' },
+const tips = [
+  {
+    icon: '☀️',
+    title: 'Best time',
+    text: 'Early morning has the best light and fewer people. The dry season (about November to February) is cooler and clearer. In the wet season, start early to miss the afternoon storms.',
+  },
+  {
+    icon: '💵',
+    title: 'Bring cash',
+    text: 'The park ticket is paid in cash and is separate from the Angkor Pass. Cambodians enter free.',
+  },
+  {
+    icon: '🚐',
+    title: 'Getting around',
+    text: 'Most visitors hire a car or van with a driver. Reports about tuk-tuks differ, so ask before you book.',
+  },
+  {
+    icon: '👟',
+    title: 'Wear shoes with grip',
+    text: 'The smooth rock can be slippery, most of all when it is wet.',
+  },
+  {
+    icon: '⚠️',
+    title: 'Stay back from the edge',
+    text: 'Take your photos from a safe spot, and never climb on wet rock.',
+  },
+  {
+    icon: '🙏',
+    title: 'Show respect',
+    text: 'Phnom Kulen is a sacred mountain. Dress modestly at temples and take your rubbish with you.',
+  },
 ];
 
-const needs = [
+const nearby = [
   {
-    title: 'An idea',
-    titleKm: 'គំនិតមួយ',
-    text: 'A business, a project, a club — anything you would want a website for.',
-    textKm: 'អាជីវកម្ម គម្រោង ក្លឹប — អ្វីក៏បានដែលអ្នកចង់មានគេហទំព័រ។',
+    icon: '💧',
+    title: 'Kulen Waterfall',
+    text: 'Two waterfalls, about 4–5 m and 15–20 m high. How much water you see depends on the season and the rain.',
   },
   {
-    title: 'A Mac',
-    titleKm: 'កុំព្យូទ័រ Mac',
-    text: 'You will set it up yourself, with the AI as your guide.',
-    textKm: 'អ្នកនឹងរៀបចំវាដោយខ្លួនឯង ដោយមាន AI ជាអ្នកណែនាំ។',
+    icon: '🛕',
+    title: 'Preah Ang Thom',
+    text: 'A hilltop pagoda with a large reclining Buddha, reached by steps past a Garuda statue.',
   },
   {
-    title: 'A GitHub account',
-    titleKm: 'គណនី GitHub',
-    text: 'Free. This is where your website’s files are kept safe. We make it together on Day 1.',
-    textKm: 'ឥតគិតថ្លៃ។ ជាកន្លែងរក្សាទុកឯកសារគេហទំព័ររបស់អ្នកដោយសុវត្ថិភាព។ យើងបង្កើតវាជាមួយគ្នានៅថ្ងៃទី ១។',
+    icon: '🔱',
+    title: 'River of a Thousand Lingas',
+    text: 'More than a thousand lingas, symbols of the god Shiva, carved into the stones of the river.',
   },
   {
-    title: 'A Cloudflare account',
-    titleKm: 'គណនី Cloudflare',
-    text: 'Free. This puts your website on the internet.',
-    textKm: 'ឥតគិតថ្លៃ។ វាដាក់គេហទំព័ររបស់អ្នកនៅលើអ៊ីនធឺណិត។',
+    icon: '🏛️',
+    title: 'More temples',
+    text: 'Many day tours also stop at Banteay Srei and Beng Mealea temples.',
   },
 ];
 
 const faqs = [
   {
-    q: 'Do I need to know how to code?',
-    qKm: 'តើខ្ញុំត្រូវចេះសរសេរកូដទេ?',
-    a: 'No. You will see some code, and you will learn what it is, but the AI writes it. Your job is to know what you want and to say it clearly.',
-    aKm: 'ទេ។ អ្នកនឹងឃើញកូដខ្លះ ហើយនឹងរៀនថាវាជាអ្វី ប៉ុន្តែ AI ជាអ្នកសរសេរវា។ ការងាររបស់អ្នក គឺដឹងថាអ្នកចង់បានអ្វី ហើយនិយាយវាឱ្យបានច្បាស់។',
+    q: 'Is Poeng Ta Kho a national park?',
+    qKm: 'តើ Poeng Ta Kho ជាឧទ្យានជាតិឬទេ?',
+    a: 'Not by itself. It is a cliff viewpoint on the road to Phnom Kulen National Park. The park’s rules and ticket apply.',
   },
   {
-    q: 'Can my website be in Khmer?',
-    qKm: 'តើគេហទំព័ររបស់ខ្ញុំអាចជាភាសាខ្មែរបានទេ?',
-    a: 'Yes. You can ask the AI to write in Khmer, or to make the site in both languages. Always have a Khmer speaker check the words — you know the language better than the AI does.',
-    aKm: 'បាន។ អ្នកអាចប្រាប់ AI ឱ្យសរសេរជាភាសាខ្មែរ ឬធ្វើគេហទំព័រជាពីរភាសា។ តែងតែឱ្យអ្នកចេះភាសាខ្មែរពិនិត្យពាក្យពេចន៍ — អ្នកស្គាល់ភាសានេះច្បាស់ជាង AI។',
+    q: 'Does the Angkor Pass cover it?',
+    qKm: 'តើសំបុត្រអង្គរគ្របដណ្តប់ទីនេះទេ?',
+    a: 'No. Phnom Kulen has its own ticket: $20 in cash for foreign visitors, free for Cambodians. Prices can change, so ask locally.',
   },
   {
-    q: 'Do I keep my website after the workshop?',
-    qKm: 'តើខ្ញុំនៅតែមានគេហទំព័ររបស់ខ្ញុំក្រោយវគ្គសិក្សាទេ?',
-    a: 'Yes. Everything is in your own GitHub and Cloudflare accounts. It is yours, and it stays online.',
-    aKm: 'បាទ/ចាស។ អ្វីៗទាំងអស់នៅក្នុងគណនី GitHub និង Cloudflare ផ្ទាល់ខ្លួនរបស់អ្នក។ វាជារបស់អ្នក ហើយវានៅតែដំណើរការលើអ៊ីនធឺណិត។',
+    q: 'How long should I plan?',
+    qKm: 'ត្រូវចំណាយពេលប៉ុន្មាន?',
+    a: 'The cliff itself is a short stop. Most people combine it with the waterfall and the temple, which makes it a full day trip from Siem Reap.',
   },
   {
-    q: 'What if the AI makes a mistake?',
-    qKm: 'ចុះបើ AI ធ្វើខុស?',
-    a: 'It will! Tell it what is wrong, the same way you would tell a person. If things get really messy, you can always go back to an earlier version.',
-    aKm: 'វានឹងធ្វើខុសម្តងម្កាល! ប្រាប់វាថាអ្វីខុស ដូចដែលអ្នកប្រាប់មនុស្សម្នាក់។ ប្រសិនបើអ្វីៗរញ៉េរញ៉ៃខ្លាំង អ្នកតែងតែអាចត្រឡប់ទៅកំណែមុនវិញបាន។',
+    q: 'Is it safe?',
+    qKm: 'តើមានសុវត្ថិភាពទេ?',
+    a: 'It is fine for most visitors if you are careful. The rock can be slippery, so wear shoes with grip and keep well back from the edge.',
+  },
+  {
+    q: 'Can I go by tuk-tuk?',
+    qKm: 'តើអាចទៅដោយតុកតុកបានទេ?',
+    a: 'Reports differ. The road up the mountain is steep and rough, and several guides recommend a car or van. Ask your driver before you book.',
   },
 ];
 
-const decks = getDecks();
+// Treetops for the illustration. A tiny seeded random keeps them the same on every build.
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const treetops = Array.from({ length: 46 }, (_, i) => {
+  const row = i % 3;
+  return {
+    cx: Math.round(rand() * 640 - 20),
+    cy: Math.round(450 + row * 28 + rand() * 20),
+    r: Math.round(30 + rand() * 24),
+    dark: rand() > 0.5,
+  };
+}).filter((t) => t.cx > 300 || t.cy > 490);
 ---
 
-<Base>
+<Base title="The Amazing Cliff of Phnom Kulen">
   <Header />
 
   <main>
     <!-- HERO -->
     <section class="relative overflow-hidden">
       <div class="pointer-events-none absolute -top-40 -right-40 size-[36rem] rounded-full bg-sun/25 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-brand/15 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-40 size-[30rem] rounded-full bg-leaf/15 blur-3xl"></div>
 
       <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2">
         <div>
           <p class="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-3 py-1 text-sm font-medium">
             <span class="size-2 rounded-full bg-leaf"></span>
-            A vibe coding workshop at New Hope Cambodia
+            Siem Reap Province, Cambodia
+            <span lang="km" class="font-khmer opacity-70">ខេត្តសៀមរាប</span>
           </p>
           <h1 class="mt-6 font-display text-5xl leading-[1.02] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            Build a real website by <span class="text-brand">talking</span> to AI.
+            The <span class="text-brand">Amazing Cliff</span> of Phnom Kulen.
           </h1>
-          <p lang="km" class="mt-4 text-xl text-ink/70">បង្កើតគេហទំព័រជាមួយ AI</p>
+          <p lang="km" class="mt-4 text-xl text-ink/70">ច្រាំងថ្មអស្ចារ្យនៃភ្នំគូលែន</p>
           <p class="mt-6 max-w-xl text-lg text-muted">
-            No coding experience needed. Describe the website you want, watch the AI build it, and publish it to the internet by the end of the week.
-            <span class="km" lang="km">មិនចាំបាច់មានបទពិសោធន៍សរសេរកូដទេ។ ពិពណ៌នាគេហទំព័រដែលអ្នកចង់បាន មើល AI បង្កើតវា ហើយដាក់វានៅលើអ៊ីនធឺណិតត្រឹមចុងសប្តាហ៍។</span>
+            Poeng Ta Kho is a lookout of smooth orange rock above a deep green canyon. It is a short walk from the road, on the way up to Phnom Kulen National Park.
+            <span class="km" lang="km">ថ្មពណ៌ទឹកក្រូចរលោង នៅលើជ្រលងភ្នំបៃតងជ្រៅ។ ដើរបន្តិចពីផ្លូវ នៅតាមផ្លូវឡើងទៅឧទ្យានជាតិភ្នំគូលែន។</span>
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a href="/lesson" class="rounded-full bg-brand px-6 py-3 font-semibold text-paper shadow-lg shadow-brand/25 transition hover:bg-brand-dark">
-              See the lessons → <span lang="km" class="font-khmer font-normal opacity-80">មេរៀន</span>
+            <a href="#visit" class="rounded-full bg-brand px-6 py-3 font-semibold text-paper shadow-lg shadow-brand/25 transition hover:bg-brand-dark">
+              Plan your visit → <span lang="km" class="font-khmer font-normal opacity-80">រៀបចំដំណើរទស្សនា</span>
             </a>
-            <a href="#how" class="rounded-full border border-ink/15 bg-white px-6 py-3 font-semibold transition hover:border-ink/40">
-              How it works <span lang="km" class="font-khmer font-normal opacity-60">របៀបដំណើរការ</span>
+            <a href="#nearby" class="rounded-full border border-ink/15 bg-white px-6 py-3 font-semibold transition hover:border-ink/40">
+              What’s nearby <span lang="km" class="font-khmer font-normal opacity-60">នៅជិតៗ</span>
             </a>
           </div>
         </div>
 
-        <!-- Illustration: a prompt on the left becomes a website on the right -->
-        <div class="relative" aria-hidden="true">
-          <div class="rounded-2xl bg-ink p-5 font-mono text-sm text-paper shadow-2xl">
-            <div class="mb-4 flex gap-1.5">
-              <span class="size-3 rounded-full bg-brand"></span>
-              <span class="size-3 rounded-full bg-sun"></span>
-              <span class="size-3 rounded-full bg-leaf"></span>
-            </div>
-            <p class="text-sun">&gt; Make a website for my family's bakery in Phnom Penh.</p>
-            <p class="mt-1 text-sun">&nbsp;&nbsp;Warm colors, our menu, and a map.</p>
-            <p class="mt-3 text-paper/60">✓ Created homepage</p>
-            <p class="text-paper/60">✓ Added menu with 6 items</p>
-            <p class="text-paper/60">✓ Added map and opening hours</p>
-            <p class="mt-3 animate-pulse">▍</p>
-          </div>
-          <div class="relative -mt-6 mr-2 ml-auto w-60 rotate-[3deg] rounded-xl border border-ink/10 bg-white p-4 shadow-xl sm:w-72">
-            <div class="h-20 rounded-lg bg-gradient-to-br from-sun to-brand"></div>
-            <p class="mt-3 font-display font-bold">Sokha's Bakery</p>
-            <p class="text-xs text-muted">Fresh bread every morning since 1998</p>
-            <div class="mt-3 grid grid-cols-3 gap-2">
-              <div class="h-8 rounded bg-paper"></div>
-              <div class="h-8 rounded bg-paper"></div>
-              <div class="h-8 rounded bg-paper"></div>
-            </div>
-          </div>
+        <!-- Illustration: an orange rock cliff above the jungle, at sunrise -->
+        <div class="relative">
+          <svg
+            viewBox="0 0 600 520"
+            role="img"
+            aria-label="Illustration of an orange rock cliff above a green jungle canyon at sunrise, with a person standing at the edge"
+            class="h-auto w-full rounded-3xl shadow-2xl"
+          >
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f4b862"></stop>
+                <stop offset="0.55" stop-color="#fbe0ae"></stop>
+                <stop offset="1" stop-color="#fbf5ea"></stop>
+              </linearGradient>
+            </defs>
+            <rect width="600" height="520" fill="url(#sky)"></rect>
+            <circle cx="455" cy="150" r="96" class="fill-sun" opacity="0.25"></circle>
+            <circle cx="455" cy="150" r="58" class="fill-sun"></circle>
+
+            <!-- far and middle hills -->
+            <path d="M0 330 C80 290 140 300 220 320 C300 340 360 280 450 285 C520 290 560 310 600 300 L600 520 L0 520Z" class="fill-leaf" opacity="0.35"></path>
+            <path d="M0 385 C90 355 170 375 250 365 C340 352 420 335 500 350 C550 359 580 355 600 350 L600 520 L0 520Z" class="fill-leaf" opacity="0.65"></path>
+
+            <!-- the cliff: shaded face, then sunlit top -->
+            <path d="M0 250 C60 230 120 235 170 215 C230 190 300 200 340 230 C372 254 372 292 352 330 L346 520 L0 520Z" class="fill-brand"></path>
+            <path d="M0 250 C60 230 120 235 170 215 C230 190 300 200 340 230 C350 238 357 247 361 257 C300 236 230 234 170 256 C120 276 60 270 0 288Z" class="fill-rock"></path>
+            <g class="stroke-brand-dark" fill="none" stroke-width="3" stroke-linecap="round" opacity="0.35">
+              <path d="M0 335 C100 322 220 340 346 326"></path>
+              <path d="M0 385 C110 372 230 392 347 376"></path>
+              <path d="M0 440 C120 428 240 448 349 432"></path>
+            </g>
+
+            <!-- a visitor at the edge -->
+            <g class="fill-ink">
+              <circle cx="207" cy="187" r="4.5"></circle>
+              <rect x="203.5" y="192" width="7" height="12" rx="3"></rect>
+            </g>
+
+            <!-- jungle canopy in front -->
+            {treetops.map((t) => <circle cx={t.cx} cy={t.cy} r={t.r} class={t.dark ? 'fill-ink' : 'fill-leaf'} opacity={t.dark ? 0.85 : 1}></circle>)}
+          </svg>
         </div>
       </div>
     </section>
 
-    <!-- STATS -->
+    <!-- QUICK FACTS -->
     <section class="border-y border-ink/10 bg-white">
-      <dl class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-10 sm:px-6 md:grid-cols-3">
+      <dl class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-10 sm:px-6 md:grid-cols-4">
         {
           stats.map((s) => (
             <div>
-              <dt class="sr-only">{s.label}</dt>
               <dd class="font-display text-4xl font-extrabold text-brand">{s.value}</dd>
-              <dd class="mt-1 text-sm text-muted">
+              <dt class="mt-1 text-sm font-normal text-muted">
                 {s.label}
                 <span class="km" lang="km">{s.labelKm}</span>
-              </dd>
+              </dt>
             </div>
           ))
         }
       </dl>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section id="how" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
-      <p class="font-semibold text-brand">How it works <span lang="km" class="font-khmer font-normal">· របៀបដំណើរការ</span></p>
+    <!-- ABOUT -->
+    <section id="about" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+      <p class="font-semibold text-brand">The cliff <span lang="km" class="font-khmer font-normal">· ច្រាំងថ្ម</span></p>
       <h2 class="mt-2 max-w-2xl font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
-        Four steps from idea to live website.
+        A cliff of smooth orange rock, in the jungle.
       </h2>
-      <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">បួនជំហាន ពីគំនិតមួយ ទៅជាគេហទំព័រដែលដំណើរការពិតប្រាកដ។</p>
-      <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">ច្រាំងថ្មពណ៌ទឹកក្រូចរលោង នៅកណ្តាលព្រៃ។</p>
+
+      <div class="mt-8 grid gap-6 lg:grid-cols-2">
+        <p class="text-lg text-muted">
+          Poeng Ta Kho is also called the “Amazing Cliff”. It is a rocky lookout where the smooth orange stone looks almost like another planet next to the green forest.
+          <span class="km" lang="km">កន្លែងនេះក៏ហៅថា “ច្រាំងថ្មអស្ចារ្យ” ដែរ។ ថ្មពណ៌ទឹកក្រូចរលោង លេចចេញពីព្រៃបៃតង។</span>
+        </p>
+        <p class="text-lg text-muted">
+          It is a viewpoint, not a park on its own. It sits on the road up to Phnom Kulen National Park, so most people stop here on the same trip as the waterfall and the temples.
+        </p>
+      </div>
+
+      <ul class="mt-12 grid gap-4 sm:grid-cols-3">
         {
-          steps.map((s, i) => (
+          sights.map((s) => (
             <li class="rounded-2xl border border-ink/10 bg-white p-6">
-              <div class="flex items-center justify-between">
-                <span class="text-3xl">{s.icon}</span>
-                <span class="font-display text-sm font-bold text-ink/30">0{i + 1}</span>
-              </div>
-              <h3 class="mt-4 font-display text-xl font-bold">
-                {s.title}
-                <span class="km text-base" lang="km">{s.titleKm}</span>
-              </h3>
-              <p class="mt-2 text-muted">
-                {s.text}
-                <span class="km" lang="km">{s.textKm}</span>
-              </p>
+              <span class="text-3xl">{s.icon}</span>
+              <h3 class="mt-4 font-display text-xl font-bold">{s.title}</h3>
+              <p class="mt-2 text-muted">{s.text}</p>
             </li>
           ))
         }
-      </ol>
+      </ul>
     </section>
 
-    <!-- BIG STATEMENT -->
-    <section class="bg-ink text-paper">
-      <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
-        <p class="font-display text-3xl leading-tight font-bold text-balance sm:text-5xl">
-          AI turns out to be <span class="text-sun">very good at writing code.</span> So the most useful skill now is knowing what to ask for.
-        </p>
-        <p lang="km" class="km mt-6 text-xl sm:text-2xl">
-          AI ពិតជាពូកែសរសេរកូដណាស់។ ដូច្នេះ ជំនាញដែលមានប្រយោជន៍បំផុតនាពេលនេះ គឺការដឹងថាត្រូវស្នើសុំអ្វី។
-        </p>
-      </div>
-    </section>
+    <!-- GETTING THERE -->
+    <section id="visit" class="scroll-mt-20 bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <p class="font-semibold text-brand">Getting there <span lang="km" class="font-khmer font-normal">· ការធ្វើដំណើរ</span></p>
+        <h2 class="mt-2 max-w-2xl font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
+          Four steps from Siem Reap to the edge.
+        </h2>
+        <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">បួនជំហានពីសៀមរាបទៅកាន់ច្រាំងថ្ម។</p>
 
-    <!-- LESSONS -->
-    <section id="lessons" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
-      <p class="font-semibold text-brand">Lessons <span lang="km" class="font-khmer font-normal">· មេរៀន</span></p>
-      <h2 class="mt-2 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Start here.</h2>
-      <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">ចាប់ផ្តើមនៅទីនេះ។</p>
-      <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {
-          decks.map((deck) => (
-            <a
-              href={`/lesson/${deck.slug}`}
-              class="group flex flex-col rounded-2xl border border-ink/10 bg-white p-6 transition hover:-translate-y-1 hover:border-brand hover:shadow-xl"
-            >
-              <span class="font-display text-sm font-bold tracking-wide text-brand uppercase">{deck.eyebrow}</span>
-              <span class="mt-2 font-display text-2xl font-bold">
-                {deck.title.replace(/^[^—]+—\s*/, '')}
-                {deck.titleKm && <span class="km text-lg" lang="km">{deck.titleKm.replace(/^[^—]+—\s*/, '')}</span>}
-              </span>
-              <span class="mt-2 flex-1 text-muted">
-                {deck.subtitle}
-                {deck.subtitleKm && <span class="km" lang="km">{deck.subtitleKm}</span>}
-              </span>
-              <span class="mt-6 font-semibold text-brand">Open slides <span class="inline-block transition group-hover:translate-x-1">→</span> <span lang="km" class="font-khmer font-normal">បើកស្លាយ</span></span>
-            </a>
-          ))
-        }
-        <a
-          href="/setup"
-          class="group flex flex-col rounded-2xl border border-ink/10 bg-white p-6 transition hover:-translate-y-1 hover:border-brand hover:shadow-xl"
-        >
-          <span class="font-display text-sm font-bold tracking-wide text-brand uppercase">Guide</span>
-          <span class="mt-2 font-display text-2xl font-bold">
-            Set up your Mac
-            <span class="km text-lg" lang="km">រៀបចំកុំព្យូទ័រ Mac របស់អ្នក</span>
-          </span>
-          <span class="mt-2 flex-1 text-muted">
-            Install the Claude app, then let the AI set up the rest of your computer.
-            <span class="km" lang="km">ដំឡើងកម្មវិធី Claude បន្ទាប់មកឱ្យ AI រៀបចំផ្នែកផ្សេងទៀតនៃកុំព្យូទ័ររបស់អ្នក។</span>
-          </span>
-          <span class="mt-6 font-semibold text-brand">Open the guide <span class="inline-block transition group-hover:translate-x-1">→</span> <span lang="km" class="font-khmer font-normal">បើកការណែនាំ</span></span>
-        </a>
-      </div>
-    </section>
-
-    <!-- WHAT YOU NEED -->
-    <section class="bg-white">
-      <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.4fr]">
-        <div>
-          <p class="font-semibold text-brand">Before you start <span lang="km" class="font-khmer font-normal">· មុនពេលចាប់ផ្តើម</span></p>
-          <h2 class="mt-2 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">What you need</h2>
-          <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">អ្វីដែលអ្នកត្រូវការ</p>
-          <p class="mt-4 text-lg text-muted">
-            That's the whole list. Everything else, the AI will help you install.
-            <span class="km" lang="km">នោះហើយជាបញ្ជីទាំងមូល។ អ្វីៗផ្សេងទៀត AI នឹងជួយអ្នកដំឡើង។</span>
-          </p>
-        </div>
-        <ul class="grid gap-4 sm:grid-cols-2">
+        <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {
-            needs.map((n) => (
+            steps.map((s, i) => (
               <li class="rounded-2xl bg-paper p-6">
-                <span class="grid size-8 place-items-center rounded-full bg-leaf text-sm font-bold text-paper">✓</span>
-                <h3 class="mt-4 font-display text-lg font-bold">
-                  {n.title}
-                  <span class="km text-base" lang="km">{n.titleKm}</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-3xl">{s.icon}</span>
+                  <span class="font-display text-sm font-bold text-ink/40">0{i + 1}</span>
+                </div>
+                <h3 class="mt-4 font-display text-xl font-bold">
+                  {s.title}
+                  <span class="km text-base" lang="km">{s.titleKm}</span>
                 </h3>
-                <p class="mt-1 text-muted">
-                  {n.text}
-                  <span class="km" lang="km">{n.textKm}</span>
-                </p>
+                <p class="mt-2 text-muted">{s.text}</p>
               </li>
             ))
           }
-        </ul>
+        </ol>
+
+        <p class="mt-8 rounded-2xl border border-sun/60 bg-sun/15 p-5 text-ink">
+          <strong>Heads up:</strong> guides do not agree on exactly where the cliff is on the road. Some put it near the entrance to Phnom Kulen, others near the highest point. Ask your driver or a local to confirm the stop.
+        </p>
       </div>
     </section>
 
+    <!-- GOOD TO KNOW -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+      <p class="font-semibold text-brand">Good to know <span lang="km" class="font-khmer font-normal">· ដឹងមុនចេញដំណើរ</span></p>
+      <h2 class="mt-2 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Before you go.</h2>
+      <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">មុនពេលចេញដំណើរ។</p>
+
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          tips.map((t) => (
+            <li class="rounded-2xl border border-ink/10 bg-white p-6">
+              <span class="text-3xl">{t.icon}</span>
+              <h3 class="mt-4 font-display text-lg font-bold">{t.title}</h3>
+              <p class="mt-1 text-muted">{t.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="bg-ink text-paper">
+      <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
+        <p class="font-display text-3xl leading-tight font-bold text-balance sm:text-5xl">
+          More than 1,000 years ago, this mountain was a royal city. <span class="text-sun">The Khmer Empire began here.</span>
+        </p>
+        <p lang="km" class="km mt-6 text-xl sm:text-2xl">
+          ជាង ១០០០ ឆ្នាំមុន ភ្នំនេះជាទីក្រុងរាជធានី។ ចក្រភពខ្មែរបានចាប់ផ្តើមនៅទីនេះ។
+        </p>
+        <p class="mx-auto mt-8 max-w-2xl text-paper/75">
+          Then called Mahendraparvata, it is where King Jayavarman II was declared “chakravartin” (universal ruler), an event seen as the founding of the empire. In 2013, laser scans from the air (lidar) revealed about 30 temples nobody knew about.
+        </p>
+      </div>
+    </section>
+
+    <!-- NEARBY -->
+    <section id="nearby" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+      <p class="font-semibold text-brand">Nearby <span lang="km" class="font-khmer font-normal">· នៅជិតៗ</span></p>
+      <h2 class="mt-2 max-w-2xl font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
+        More to see on Phnom Kulen.
+      </h2>
+      <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">កន្លែងផ្សេងទៀតនៅភ្នំគូលែន។</p>
+      <p class="mt-4 max-w-2xl text-lg text-muted">
+        Jayavarman-Norodom Phnom Kulen National Park covers about 374 km² and was set up in 1993. One park ticket covers the main sights below.
+      </p>
+
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          nearby.map((n) => (
+            <li class="rounded-2xl border border-ink/10 bg-white p-6">
+              <span class="text-3xl">{n.icon}</span>
+              <h3 class="mt-4 font-display text-lg font-bold">{n.title}</h3>
+              <p class="mt-1 text-muted">{n.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
     <!-- FAQ -->
-    <section class="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28">
+    <section id="faq" class="mx-auto max-w-3xl scroll-mt-20 px-4 pb-20 sm:px-6 sm:pb-28">
       <h2 class="text-center font-display text-4xl font-extrabold tracking-tight">Questions</h2>
       <p class="km mt-2 text-center text-xl font-semibold" lang="km">សំណួរ</p>
       <div class="mt-10 divide-y divide-ink/10 border-y border-ink/10">
@@ -312,10 +389,7 @@ const decks = getDecks();
                 </span>
                 <span class="text-2xl text-brand transition group-open:rotate-45">+</span>
               </summary>
-              <p class="mt-3 text-muted">
-                {f.a}
-                <span class="km" lang="km">{f.aKm}</span>
-              </p>
+              <p class="mt-3 text-muted">{f.a}</p>
             </details>
           ))
         }
@@ -325,10 +399,11 @@ const decks = getDecks();
     <!-- CALL TO ACTION -->
     <section class="px-4 pb-20 sm:px-6">
       <div class="mx-auto max-w-6xl rounded-3xl bg-brand px-6 py-16 text-center text-paper sm:py-20">
-        <h2 class="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">Ready? Let's build something.</h2>
-        <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">រួចរាល់ហើយឬនៅ? តោះបង្កើតអ្វីមួយ។</p>
-        <a href="/lesson/day-1" class="mt-8 inline-block rounded-full bg-paper px-8 py-4 font-semibold text-ink transition hover:bg-sun">
-          Start with Day 1 → <span lang="km" class="font-khmer font-normal">ចាប់ផ្តើមថ្ងៃទី ១</span>
+        <h2 class="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">Ready for the view?</h2>
+        <p class="mt-3 text-lg text-paper/90">Start early, bring cash, and wear shoes with good grip.</p>
+        <p class="km mt-3 text-xl font-semibold sm:text-2xl" lang="km">ចេញដំណើរពីព្រឹក យកលុយសុទ្ធ ហើយពាក់ស្បែកជើងដែលមិនរអិល។</p>
+        <a href="#top" class="mt-8 inline-block rounded-full bg-paper px-8 py-4 font-semibold text-ink transition hover:bg-sun">
+          Back to the top ↑ <span lang="km" class="font-khmer font-normal">ត្រឡប់ទៅលើ</span>
         </a>
       </div>
     </section>
