@@ -1,64 +1,71 @@
-# Vibe Code Cambodia
+# Poeng Ta Kho
 
-This is a real website that you can copy and change into **your own** website, just by talking to an AI.
+A small visitor guide to **Poeng Ta Kho**, the "Amazing Cliff" on the road up to Phnom Kulen National Park, Siem Reap Province, Cambodia.
 
-Right now it's the website for a vibe coding workshop at New Hope Cambodia. It has a homepage, plus the workshop's slides at `/lesson`.
+It is a one-page website with facts, how to get there, practical tips, nearby sights, and a short FAQ. The text is in English with Khmer captions under the main lines.
 
-## New Mac? Set it up first
+This site was made as a live demo at New Hope Cambodia, to show how to build and publish a website by talking to an AI. It started from the "Vibe Code Cambodia" workshop template.
 
-Follow the setup guide: it's at `/setup` on the website, or **[docs/mac-setup.md](docs/mac-setup.md)** here. You install the Claude app, then the AI helps you install everything else.
+> **Please check the Khmer.** The Khmer text was written by an AI. Ask a Khmer speaker to read it before you share the site widely.
 
-## Make your own copy
+## See it on your computer
 
-1. On GitHub, click the green **Use this template** button, then **Create a new repository**. (Use this button, *not* "Fork".)
-2. Give your repository a name, like `my-bakery-site`.
-3. In the Claude app, open the **Code** tab in your Projects folder and ask: *"Clone my GitHub repository my-bakery-site into this folder and install it."*
-4. Start a **new session** in the `my-bakery-site` folder, type **`/make-it-mine`**, and answer its questions. It turns this into a website for your idea.
-5. Ask Claude to **show you the preview**. Your site opens next to the chat, and it updates as the AI makes changes.
+```
+nvm use
+npm install
+npm run dev
+```
 
-Prefer the Terminal? `gh repo clone my-bakery-site && cd my-bakery-site && nvm use && npm install && claude` works too, and `npm run dev` shows the site at http://localhost:4321.
+Then open the address it prints, usually http://localhost:4321. The page updates as you change files.
 
-From here, just ask for what you want: *"make the headline bigger"*, *"add a section with our prices"*, *"it looks broken on my phone"*.
+## Change the site
 
-## Put it on the internet (one-time setup)
+Just ask Claude, for example: *"Add a packing list section"*, *"Make the colors look like sunset"*, *"Add a Telegram contact button"*.
+
+Or edit the files yourself:
+
+- `src/pages/index.astro` — the whole page. The facts, steps, tips, and FAQ are lists at the top of the file.
+- `src/site.ts` — site name, tagline, and description.
+- `src/styles/global.css` — colors and fonts, in the `@theme` block.
+- `src/components/Header.astro` and `Footer.astro` — the top bar and the bottom of the page, including the list of sources.
+- `public/` — the favicon, and any images you add. A file at `public/photo.jpg` is used as `/photo.jpg`.
+
+Khmer text goes in `<span class="km" lang="km">…</span>` under the English line.
+
+## About the information
+
+The facts come from public travel pages and Wikipedia, linked in the site footer. Sources disagree on some details, such as exactly where the cliff is on the road and whether tuk-tuks can make the trip, so the site says "reported" for those. Prices (the $20 park ticket for foreign visitors) can change. Check with a driver or guesthouse before you go.
+
+Poeng Ta Kho is a viewpoint, not a national park on its own. It sits on the road to Phnom Kulen National Park.
+
+## Put it on the internet
+
+The site is static, so Cloudflare just serves the files from `npm run build`.
 
 1. Log in to [Cloudflare](https://dash.cloudflare.com).
 2. Go to **Workers & Pages** → **Create** → **Import a repository**.
-3. Connect your GitHub account and choose your repository.
+3. Connect GitHub and choose this repository.
 4. Keep the default settings (build command `npm run build`, deploy command `npx wrangler deploy`) and click **Deploy**.
 
-A minute later you'll have a link like `my-bakery-site.your-name.workers.dev`. That's your live website.
+After that:
 
-After this, it's automatic:
+- **Push to `main`** → the live site updates.
+- **Push a branch or open a pull request** → you get a private preview link.
 
-- **Push to `main`** → your live site updates.
-- **Push a branch or open a pull request** → you get a private **preview link** to check the change first.
+> **If the build fails:** the `name` in `wrangler.jsonc` (`poeng-ta-kho-demo`) must match the Worker name in Cloudflare.
 
-There are no API keys or secrets to set up. Cloudflare builds the site itself.
-
-> **If the build fails:** the `name` in `wrangler.jsonc` must match the Worker name in Cloudflare. Ask Claude: *"change the name in wrangler.jsonc to ___"*, then commit and push.
-
-## Useful commands
+## Commands
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Preview the site on your computer, at http://localhost:4321 |
-| `npm run build` | Build the finished site into the `dist/` folder |
-| `npm run preview` | Build, then preview it exactly as Cloudflare will serve it |
-| `npm run deploy` | Build and publish to Cloudflare by hand (you usually don't need this) |
+| `npm run dev` | Preview the site on your computer |
+| `npm run build` | Build the finished site into `dist/` |
+| `npm run preview` | Build, then preview it the way Cloudflare will serve it |
+| `npm run deploy` | Build and publish to Cloudflare by hand (usually not needed) |
 
-## Where things are
+## Make your own copy
 
-- `src/pages/index.astro` — the homepage
-- `src/site.ts` — site name, tagline, contact email
-- `src/styles/global.css` — colors and fonts
-- `src/content/decks/` — slide decks, written in Markdown ([how to edit slides](docs/editing-slides.md))
-- `public/` — images and other files
-- `CLAUDE.md` — instructions the AI reads before helping you
-
-## Backup plan: publish without GitHub
-
-If the GitHub connection isn't working, run `npm run build`. Then in Cloudflare go to **Workers & Pages** → **Create** → **Pages** → **Upload assets**, and drag in the `dist` folder.
+Want a site like this for your own idea? Create a new repository from the workshop template on GitHub (use the **Use this template** button), open it in the Claude app, and type `/make-it-mine`. `docs/mac-setup.md` explains how to set up a Mac for this.
 
 ---
 
