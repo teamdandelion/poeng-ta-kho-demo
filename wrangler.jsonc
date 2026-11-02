@@ -7,6 +7,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "poeng-ta-kho-demo",
   "compatibility_date": "2026-10-01",
+  // Build the site before every deploy. ./dist is not stored in GitHub, so it
+  // must be created here, even if the Cloudflare dashboard has no build command.
+  "build": { "command": "npm run build" },
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
